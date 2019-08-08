@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        canvas = document.createElement('canvas');
+        canvas.width = 500;
+        canvas.height = 500;
+        canvas.style.border = '1px solid pink';
+        document.body.appendChild(canvas);
+        var ff = canvas.getContext('2d');
+        var data = [{
+                name: '宇儿',
+                grade: 59,
+            },
+            {
+                name: '茂儿',
+                grade: 59,
+            },
+            {
+                name: '彭于晏',
+                grade: 95,
+            },
+            {
+                name: '李易峰',
+                grade: 100,
+            },
+            {
+                name: '杨幂',
+                grade: 100,
+            },
+            {
+                name: '芳芳',
+                grade: 90,
+            },
+        ];
+        //坐标轴
+        ff.translate(50, 450);
+        var colorArr = [];
+        function barChart(e) {
+            ff.beginPath();
+            ff.moveTo(0, 0);
+            ff.lineTo(0, -400);
+            ff.moveTo(0, 0);
+            ff.lineTo(400, 0);
+            ff.stroke();
+            //画刻度
+            ff.save();
+            ff.beginPath();
+            ff.textAlign = 'end';
+            ff.textBaseline = 'middle';
+            var maxVal = JSON.parse(JSON.stringify(data)).sort((a, b) => b.grade - a.grade)[0].grade;
+            for (var i = 50; i <= 400; i += 50) {
+                ff.moveTo(0, -i);
+                ff.lineTo(3, -i);
+                ff.stroke();
+                ff.fillText(i / 400 * maxVal, 0, -i);
+            };
+            ff.restore();
+            var Xzhi = 400 / (data.length + 1);
+            ff.save();
+            ff.beginPath();
+            ff.textAlign = 'center';
+            for (var i = 0; i < data.length; i++) {
+                ff.fillText(data[i].name, Xzhi * (i + 1), 15);
+            }
+            ff.restore();
+            ff.save();
+            for (var i = 0; i < data.length; i++) {
+                colorArr.push(suijiColor());
+                ff.fillStyle = colorArr[i];
+                ff.beginPath();
+                ff.rect(Xzhi * (i + 1),0,20,-data[i].grade / maxVal * 400);
+                ff.closePath();
+                ff.fill();
+                if(e && ff.isPointInPath(e.offsetX,e.offsetY)){
+                    ff.fillStyle = 'pink';
+                    ff.fillText(data[i].grade,Xzhi * (i + 1),-data[i].grade / maxVal * 400);
+                    ff.fill();
+                    if(data[i].grade < 60){
+                        ff.fillStyle = 'red';
+                        ff.fillText('笨蛋',e.offsetX - 50,-(450 - e.offsetY));
+                    }else{
+                        ff.fillStyle = 'red';
+                        ff.fillText('天才',e.offsetX - 50,-(450 - e.offsetY));
+                    }
+                }
+            }
+            ff.restore();
+        };
+        barChart();
+        function suijiColor() {
+            return `rgb(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)})`
+        };
+        canvas.addEventListener('mousemove', function (e) {
+            // var event = e || window.event;
+            ff.clearRect(-50, -450, 500, 500);
+            barChart(e);
+
+        });
+    </script>
+</body>
+
+</html> 
