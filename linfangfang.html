@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //monster
+        canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 400;
+        canvas.style.border = '1px solid red';
+        document.body.appendChild(canvas);
+        var ctx = canvas.getContext('2d');
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'yellow';
+        ctx.arc(200,200,150,0,Math.PI / 180 * 360);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.arc(250,120,14,0,Math.PI / 180 * 360);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.arc(255,125,6,0,Math.PI / 180 * 360);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = 'gray';
+        ctx.lineWidth = '4';
+        for(var i = 170; i <= 230; i += 10){
+            ctx.moveTo(i,55);
+            ctx.lineTo(i,85);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.moveTo(200,200);
+        ctx.arc(200,200,150,0,-(Math.PI / 180 * 12),true);
+        ctx.fill();
+        ctx.restore();
+
+
+
+        //分析图
+        var data = [{
+                value: 335,
+                name: '直接访问',
+                color: "rgb(213, 58, 53)"
+            },
+            {
+                value: 310,
+                name: '邮件营销',
+                color: "rgb(51, 75, 92)"
+            },
+            {
+                value: 234,
+                name: '联盟广告',
+                color: "rgb(106, 176, 184)"
+            },
+            {
+                value: 135,
+                name: '视频广告',
+                color: "rgb(233, 143, 111)"
+            },
+            {
+                value: 1548,
+                name: '搜索引擎',
+                color: "rgb(145, 199, 174)"
+            }
+        ]
+        canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 400;
+        canvas.style.border = '1px solid red';
+        document.body.appendChild(canvas);
+        var ctx = canvas.getContext('2d');
+        var deg = Math.PI / 180;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.arc(200, 200, 150, 0, deg * 360);
+        ctx.fill();
+        ctx.restore();
+
+        var numArr = [];
+        var colorArr = [];
+        var singleNum = [];
+        var startDeg = 0;
+        var endDeg = null;
+
+        for (var i = 0; i < data.length; i++) {
+            numArr.push(data[i].value);
+        }
+        var sum = numArr.reduce(function (prev, cur) {
+            return prev + cur;
+        });
+
+        for (var i = 0; i < data.length; i++) {
+            singleNum.push(data[i].value / sum * 360);
+            endDeg = singleNum[i];
+            colorArr.push(data[i].color);
+            ctx.fillStyle = colorArr[i];
+            ctx.beginPath();
+            ctx.moveTo(200, 200);
+            ctx.arc(200, 200, 150, startDeg * deg, (endDeg + startDeg) * deg);
+            ctx.closePath();
+            startDeg += endDeg;
+            ctx.fill();
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.arc(200, 200, 100, 0, deg * 360);
+        ctx.fill();
+        ctx.restore();
+
+        var Yzhione = 100 / (data.length + 1);
+        var Yzhitwo = 110 / (data.length + 1);
+        ctx.save();
+        for (var i = 0; i < data.length; i++) {
+            colorArr.push(data[i].color);
+            ctx.fillStyle = colorArr[i];
+            ctx.beginPath();
+            ctx.rect(5, Yzhione * (i + 1), 25, 12);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+
+        ctx.save();
+        for (var i = 0; i < data.length; i++) {
+            ctx.fillStyle = 'gray';
+            ctx.fillText(data[i].name, 35, Yzhitwo * (i + 1), 40);
+        }
+        ctx.restore();
+    </script>
+</body>
+</html>
